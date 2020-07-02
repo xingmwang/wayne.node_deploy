@@ -1,0 +1,29 @@
+---
+# tasks file for wayne.node_deploy
+- name: create app running user
+  user:
+    name: '{{ nginx_running_user }}'
+    shell: /usr/sbin/nologin
+    
+- name: create node static home directory
+  file:
+    name: '{{ node_project_home }}'
+    owner: '{{ nginx_running_user }}'
+    group: '{{ nginx_running_user }}'
+    recurse: yes
+    state: directory
+  tags: deploy
+
+- name: copy code to host {{ inventory_hostname }}
+  synchronize:
+    src: '{{ node_static_source_path }}/'
+    dest: '{{ node_project_home }}'
+    recursive: yes
+    delete: yes
+    archive: no
+    compress: yes
+    rsync_opts:
+      - "--no-motd"
+      - "--exclude=.gitignore"
+      - "--exclude=.git"
+  tags: deploy

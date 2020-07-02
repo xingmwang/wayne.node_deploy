@@ -1,0 +1,6 @@
+---
+# defaults file for wayne.node_deploy
+node_service_name:
+node_static_source_path:
+node_project_home: '{{ vars[node_service_name]["path"] }}'
+nginx_running_user: app
